@@ -89,7 +89,6 @@ function genP(A,temp=10)
 end
 
 function ParamedRW(A,P,centres,stepno=1000)
-    record=[]
     Po = copy(P)
     indis = vec(CartesianIndices(A))
     moves = [CartesianIndex(1,1),CartesianIndex(0,1),CartesianIndex(1,0),CartesianIndex(0,-1),CartesianIndex(-1,0),CartesianIndex(-1,1),CartesianIndex(1,-1),CartesianIndex(-1,-1)]
@@ -116,10 +115,9 @@ function ParamedRW(A,P,centres,stepno=1000)
                 p = CartesianIndex(p[1],1)
             end
             A[p] = 1 
-            push!(record,copy(A))
-        end
+         end
     end
-    return A, Po, record
+    return A, Po
 end 
 
 
@@ -131,10 +129,10 @@ function makeBlot(dims=(200,200),P=nothing,centres=nothing)
     if centres === nothing
         centres = getCentres(A)
     end
-    C, P = ParamedRW(A,P,centres,length(A)/10)
-    G = eulrsmooth(C,0.6)
-    H  = [G[:,end:-1:1] G]
-    blot = (H.-minimum(H)) ./(maximum(H)-minimum(H))
+    A, P = ParamedRW(A,P,centres,length(A)/10)
+    A = eulrsmooth(A,0.6)
+    A  = [A[:,end:-1:1] A]
+    blot = (A.-minimum(A)) ./(maximum(A)-minimum(A))
     return blot, P, centres
 end
 
