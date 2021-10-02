@@ -131,9 +131,9 @@ function makeBlot(dims=(200,200),P=nothing,centres=nothing)
     if centres === nothing
         centres = getCentres(A)
     end
-    A, P = ParamedRW(A,P,centres,length(A)/10)
-    A = eulrsmooth(C,0.6)
-    blot  = [G[:,end:-1:1] G]
+    C, P = ParamedRW(A,P,centres,length(A)/10)
+    G = eulrsmooth(C,0.6)
+    H  = [G[:,end:-1:1] G]
     blot = (H.-minimum(H)) ./(maximum(H)-minimum(H))
     return blot, P, centres
 end
